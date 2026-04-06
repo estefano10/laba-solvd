@@ -1,5 +1,8 @@
 package com.solvd.CarService;
 
+import com.solvd.CarService.enums.ExperienceLevel;
+import com.solvd.CarService.enums.FuelType;
+import com.solvd.CarService.enums.OrderStatus;
 import com.solvd.CarService.exception.InvalidCustomerException;
 import com.solvd.CarService.exception.InvalidHourlyRateException;
 import com.solvd.CarService.exception.OutOfStockException;
@@ -42,13 +45,13 @@ public class Main {
             LOGGER.info("Discount: " + c.getDiscount());
         }
 
-        Car car = new Car("325I", 2026, "BMW");
+        Car car = new Car("325I", 2026, "BMW", FuelType.GASOLINE );
 
         // Testing COLLECTION: ArrayList - list of mechanics
         List<Mechanic> mechanics = new ArrayList<>();
         try {
-            mechanics.add(new Mechanic("Allen", "Smith", 300));
-            mechanics.add(new Mechanic("John", "Doe", 100));
+            mechanics.add(new Mechanic("Allen", "Smith", 500, ExperienceLevel.SENIOR));
+            mechanics.add(new Mechanic("John", "Doe", 100, ExperienceLevel.JUNIOR));
         } catch (InvalidHourlyRateException e) {
             LOGGER.error(e.getMessage());
         }
@@ -65,7 +68,7 @@ public class Main {
         }
 
         // Testing ORDER and EXCEPTION: InvalidCustomerException, InvalidHourlyRateException, OutOfStockException
-        Order order = new Order(customers.iterator().next(), car, mechanics.get(0), repair, spares.get(1));
+        Order order = new Order(customers.iterator().next(), car, mechanics.get(0), repair, spares.get(1), OrderStatus.PENDING);
         LOGGER.info(order.toString());
 
         // Testing COLLECTION: HashMap - cost breakdown of an order
@@ -107,8 +110,8 @@ public class Main {
         // Testing GENERIC CLASS: Repository<Mechanic>
         Repository<Mechanic> mechanicsGenericList = new Repository<>();
         try {
-            mechanicsGenericList.add(new Mechanic("Lionel", "Messi", 10.0));
-            mechanicsGenericList.add(new Mechanic("Enzo", "Ferrari", 9.0));
+            mechanicsGenericList.add(new Mechanic("Lionel", "Messi", 10.0, ExperienceLevel.JUNIOR));
+            mechanicsGenericList.add(new Mechanic("Enzo", "Ferrari", 19.0, ExperienceLevel.SEMI_SENIOR));
         } catch (InvalidHourlyRateException e) {
             LOGGER.error(e.getMessage());
         }
@@ -120,5 +123,24 @@ public class Main {
         Pair<Mechanic, Order> assignment = new Pair<>(mechanics.get(0), order);
         LOGGER.info(assignment.getFirst().toString());
         LOGGER.info(assignment.getSecond().toString());
+
+        //Testing ENUMS: ExperienceLevel
+        List<Mechanic> mechanicsEnum = new ArrayList<>();
+        try {
+            mechanicsEnum.add(new Mechanic("Will", "Smith", 500, ExperienceLevel.SENIOR));
+            mechanicsEnum.add(new Mechanic("Mark", "Doe", 100, ExperienceLevel.JUNIOR));
+        } catch (InvalidHourlyRateException e) {
+            LOGGER.error(e.getMessage());
+        }
+        Order order2 = new Order(customers.iterator().next(), car, mechanicsEnum.get(1), repair, spares.get(1), OrderStatus.IN_PROGRESS);
+        LOGGER.info(order2.toString());
+
+        //Testing ENUMS: FuelType
+        Car car2 = new Car("325I", 2026, "BMW", FuelType.GASOLINE );
+        System.out.println("car2 = " + car2);
+
+        //Testing ENUMS: OrderStatus
+        Order order3 = new Order(customers.iterator().next(), car, mechanicsEnum.get(1), repair, spares.get(1), OrderStatus.COMPLETED);
+        LOGGER.info(order3.toString());
     }
 }

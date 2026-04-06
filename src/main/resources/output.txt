@@ -1,0 +1,6 @@
+QA: 6
+programming: 0
+java: 0
+QA: 6
+programming: 0
+Java: 10

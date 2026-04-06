@@ -1,5 +1,6 @@
 package com.solvd.CarService.model;
 
+import com.solvd.CarService.enums.ExperienceLevel;
 import com.solvd.CarService.exception.InvalidHourlyRateException;
 import com.solvd.CarService.interfaces.Workable;
 
@@ -9,15 +10,17 @@ import org.apache.logging.log4j.Logger;
 
 public class Mechanic extends Person implements Workable {
     private double hourlyRate;
+    private final ExperienceLevel experienceLevel;
 
     private static final Logger LOGGER = LogManager.getLogger(Mechanic.class);
 
-    public Mechanic(String name, String lastname, double hourlyRate)throws InvalidHourlyRateException{
+    public Mechanic(String name, String lastname, double hourlyRate, ExperienceLevel experienceLevel)throws InvalidHourlyRateException{
         super(name, lastname);
         if (hourlyRate < 0){
             throw new InvalidHourlyRateException("Hourly rate cannot be negative");
         }
         this.hourlyRate = hourlyRate;
+        this.experienceLevel = experienceLevel;
     }
 
 
@@ -28,7 +31,7 @@ public class Mechanic extends Person implements Workable {
 
     @Override
     public String toString(){
-        return "Mechanic name: "+getName()+", rate: "+hourlyRate;
+        return "Mechanic name: "+getName()+", rate: "+hourlyRate+ " Seniority: "+ getExperienceLevel();
     }
 
     @Override
@@ -54,5 +57,9 @@ public class Mechanic extends Person implements Workable {
 
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+
+    public ExperienceLevel getExperienceLevel() {
+        return experienceLevel;
     }
 }

@@ -1,16 +1,20 @@
 package com.solvd.CarService.model;
 
+import com.solvd.CarService.enums.FuelType;
+
 public class Car extends Vehicle {
     private String brand;
+    private final FuelType fuelType;
 
-    public Car(String model, int year, String brand){
+    public Car(String model, int year, String brand, FuelType fuelType){
         super(model, year);
         this.brand = brand;
+        this.fuelType = fuelType;
     }
 
     @Override
     public String toString(){
-        return "Car model: "+model+", brand: "+brand+ ", year: "+year;
+        return "Car model: "+model+", brand: "+brand+ ", year: "+year+ ", Fuel type: "+ getFuelType();
     }
 
     @Override
@@ -41,5 +45,9 @@ public class Car extends Vehicle {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
     }
 }

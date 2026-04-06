@@ -1,5 +1,6 @@
 package com.solvd.CarService.model;
 
+import com.solvd.CarService.enums.OrderStatus;
 import com.solvd.CarService.interfaces.Printable;
 import com.solvd.CarService.service.Repair;
 import com.solvd.CarService.service.Spare;
@@ -13,13 +14,15 @@ public class Order implements Printable {
     private Mechanic mechanic;
     private Repair repair;
     private Spare spare;
+    private OrderStatus orderStatus;
 
-    public Order(Customer customer, Car car, Mechanic mechanic, Repair repair, Spare spare){
+    public Order(Customer customer, Car car, Mechanic mechanic, Repair repair, Spare spare, OrderStatus orderStatus){
         this.customer = customer;
         this.car = car;
         this.mechanic = mechanic;
         this.repair = repair;
         this.spare = spare;
+        this.orderStatus = orderStatus;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class Order implements Printable {
                 mechanic + "\n" +
                 repair + "\n" +
                 spare + "\n" +
+                orderStatus + "\n" +
                 "Total: " + calculateTotal();
     }
 }
