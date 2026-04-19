@@ -1,5 +1,7 @@
 package com.solvd.CarService;
 
+import com.solvd.CarService.annotations.Employee;
+import com.solvd.CarService.annotations.Sensitive;
 import com.solvd.CarService.enums.ExperienceLevel;
 import com.solvd.CarService.enums.FuelType;
 import com.solvd.CarService.enums.OrderStatus;
@@ -14,9 +16,11 @@ import com.solvd.CarService.model.*;
 import com.solvd.CarService.service.Repair;
 import com.solvd.CarService.service.Spare;
 
+import com.solvd.CarService.utils.SensitiveMasker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -128,8 +132,8 @@ public class Main {
 
         // Testing GENERIC CLASS: Pair<Mechanic, Order>
         Pair<Mechanic, Order> assignment = new Pair<>(mechanics.get(0), order);
-        LOGGER.info(assignment.getFirst().toString());
-        LOGGER.info(assignment.getSecond().toString());
+        LOGGER.info(assignment.first().toString());
+        LOGGER.info(assignment.second().toString());
 
         //Testing ENUMS: ExperienceLevel
         List<Mechanic> mechanicsEnum = new ArrayList<>();
@@ -161,6 +165,58 @@ public class Main {
         //Testing LAMBDA: OrderPrinter
         OrderPrinter printer = currentOrder -> LOGGER.info(order.toString());
         printer.print(order);
+
+        //Testing RECORDS
+        Pair<String, Integer> pairRecord = new Pair<>("Estefano", 28);
+        LOGGER.info(pairRecord.first());
+        LOGGER.info(pairRecord.second());
+
+        Ecu ecuRecord = new Ecu("Bosch EDC17C46","SW: 1037505841","OSEK/VDX");
+        LOGGER.info(ecuRecord.moduleType());
+        LOGGER.info(ecuRecord.firmwareVersion());
+        LOGGER.info(ecuRecord.OS());
+
+        Invoice invoiceRecord = new Invoice(1000.0);
+        LOGGER.info(invoiceRecord.totalAmount());
+
+        //Testing ANNOTATIONS
+        try {
+            Mechanic myMechanic = new Mechanic("Declan", "Rice", 500.0, ExperienceLevel.SEMI_SENIOR);
+            var anotacion = myMechanic.getClass().getAnnotations();
+            System.out.println(Arrays.toString(anotacion));
+            System.out.println("TESTING SENSITIVEMASKER");
+            SensitiveMasker.mask(myMechanic);
+
+            if (myMechanic.getClass().isAnnotationPresent(Employee.class)){
+                System.out.println("This is an employee");
+            }else {
+                System.out.println("Is not a employee");
+            }
+
+        }catch (InvalidHourlyRateException e){
+            LOGGER.error(e.getMessage());
+        }
+
+        try {
+            NewCustomer myCustomer = new NewCustomer("Luis", "Diaz", 40662597, false);
+            for (Field field : myCustomer.getClass().getSuperclass().getDeclaredFields()){
+                if (field.isAnnotationPresent(Sensitive.class)){
+                    System.out.println("Sensitive field found: " + field.getName());
+                }
+            }
+        }catch (InvalidCustomerException e){
+            LOGGER.error(e.getMessage());
+        }
+
+        //BONUS
+        try {
+            NewCustomer myCustomer2 = new NewCustomer("Jose", "Diaz", 40662851, true);
+            List<FieldResult> results = SensitiveMasker.mask(myCustomer2);
+            results.forEach(r -> LOGGER.info(r.fieldName()+": "+ r.value()));
+        }catch (InvalidCustomerException e){
+            LOGGER.error(e.getMessage());
+        }
+
 
 
     }

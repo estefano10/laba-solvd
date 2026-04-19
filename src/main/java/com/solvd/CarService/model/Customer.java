@@ -1,10 +1,12 @@
 package com.solvd.CarService.model;
 
+import com.solvd.CarService.annotations.Sensitive;
 import com.solvd.CarService.exception.InvalidCustomerException;
 import com.solvd.CarService.interfaces.Discountable;
 
 public abstract class Customer extends Person implements Discountable {
     protected boolean regularCustomer;
+    @Sensitive
     protected int DNI;
 
     public Customer(String name, String lastname, int DNI, boolean regularCustomer) throws InvalidCustomerException {
