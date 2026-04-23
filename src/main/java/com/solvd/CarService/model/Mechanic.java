@@ -1,5 +1,7 @@
 package com.solvd.CarService.model;
 
+import com.solvd.CarService.annotations.Employee;
+import com.solvd.CarService.annotations.Sensitive;
 import com.solvd.CarService.enums.ExperienceLevel;
 import com.solvd.CarService.exception.InvalidHourlyRateException;
 import com.solvd.CarService.interfaces.Workable;
@@ -7,8 +9,9 @@ import com.solvd.CarService.interfaces.Workable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+@Employee("mechanic")
 public class Mechanic extends Person implements Workable {
+    @Sensitive
     private double hourlyRate;
     private final ExperienceLevel experienceLevel;
 

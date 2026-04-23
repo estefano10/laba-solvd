@@ -14,7 +14,7 @@ public class Car extends Vehicle {
 
     @Override
     public String toString(){
-        return "Car model: "+model+", brand: "+brand+ ", year: "+year+ ", Fuel type: "+ getFuelType();
+        return "Car model: "+getModel()+", brand: "+brand+ ", year: "+getYear()+ ", Fuel type: "+ getFuelType();
     }
 
     @Override
@@ -23,29 +23,23 @@ public class Car extends Vehicle {
         if (!(o instanceof Car)) return false;
 
         Car c = (Car) o;
-        return model.equals(c.model);
+        return getModel().equals(c.getModel());
+    }
+
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     @Override
     public int hashCode(){
-        return model.hashCode();
+        return getModel().hashCode();
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
 
     public FuelType getFuelType() {
         return fuelType;
